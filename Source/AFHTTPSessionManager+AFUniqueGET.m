@@ -34,9 +34,9 @@
             } else {
                 @try {
                     __block NSURLSessionDataTask *dataTask = [self dataTaskWithRequest:request
-                                                                     completionHandler:^(NSURLResponse * __unused response,
-                                                                                         id responseObject,
-                                                                                         NSError *error) {
+                                                                        uploadProgress:nil
+                                                                      downloadProgress:nil
+                                                                     completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
                                                                          dispatch_async(dispatch_get_main_queue(), ^{
                                                                              if (error && failure) {
                                                                                  failure(dataTask, error);
@@ -45,7 +45,6 @@
                                                                              }
                                                                          });
                                                                      }];
-                    
                     [dataTask resume];
 
                     dispatch_async(dispatch_get_main_queue(), ^{
