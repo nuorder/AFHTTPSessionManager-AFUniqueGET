@@ -1,4 +1,4 @@
-#import "AFHTTPSessionManager.h"
+@import AFNetworking;
 
 @interface AFHTTPSessionManager (AFUniqueGET)
 
