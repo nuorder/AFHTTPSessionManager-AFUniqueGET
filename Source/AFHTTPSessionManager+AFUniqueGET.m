@@ -4,6 +4,7 @@
 
 - (void)uniqueGET:(NSString *)URLString
        parameters:(id)parameters
+      cachePolicy:(NSURLRequestCachePolicy)cachePolicy
              task:(void (^)(NSURLSessionDataTask *task, BOOL existing))task
           success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
           failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure
@@ -17,6 +18,7 @@
                                                                    URLString:path
                                                                   parameters:parameters
                                                                        error:&error];
+    request.cachePolicy = cachePolicy;
     if (error) {
         if (failure) {
             failure(nil, error);
@@ -32,9 +34,9 @@
             } else {
                 @try {
                     __block NSURLSessionDataTask *dataTask = [self dataTaskWithRequest:request
-                                                                     completionHandler:^(NSURLResponse * __unused response,
-                                                                                         id responseObject,
-                                                                                         NSError *error) {
+                                                                        uploadProgress:nil
+                                                                      downloadProgress:nil
+                                                                     completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
                                                                          dispatch_async(dispatch_get_main_queue(), ^{
                                                                              if (error && failure) {
                                                                                  failure(dataTask, error);
@@ -43,7 +45,6 @@
                                                                              }
                                                                          });
                                                                      }];
-                    
                     [dataTask resume];
 
                     dispatch_async(dispatch_get_main_queue(), ^{
